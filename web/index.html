@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <!-- SPA_DROP_SAMPLE_20260912 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Site Pulse Audit asks unbranded shopper questions on your product URL. Then it shows if models name you, ignore you, or name a competitor." />
+  <meta property="og:title" content="sitepulseaudit.com — Asks ChatGPT, Perplexity, Google shopper’s questions and lists their recommendations" />
+  <meta property="og:description" content="Site Pulse Audit asks unbranded shopper questions on your product URL. Then it shows if models name you, ignore you, or name a competitor." />
+  <meta property="og:type" content="website" />
+  <link rel="canonical" href="http://sitepulseaudit.com.s3-website-us-east-1.amazonaws.com/" />
+  <title>sitepulseaudit.com — shopper questions for ChatGPT, Perplexity, Google</title>
+  <style>
+    :root {
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      color: #FFFFFF;
+      --accent: #00E5FF;
+      --accent-strong: #7DF9FF;
+      --neon: #00E5FF;
+      --bg: #000B1E;
+      --card: #001633;
+      --input: #000822;
+      --card-border: rgba(0, 229, 255, 0.35);
+      --muted: #A8C5D6;
+      --text: #FFFFFF;
+      --btn-text: #000000;
+      --box-border: 4px solid #00E5FF;
+    }
+    body { margin: 0; background: var(--bg); color: var(--text); }
+    main { max-width: 880px; margin: 0 auto; padding: 2rem 1rem 4rem; }
+    a { color: var(--accent-strong); }
+
+    .box {
+      background: var(--card);
+      border: var(--box-border);
+      border-radius: 16px;
+      padding: 1.35rem 1.4rem;
+      margin: 1.25rem 0;
+      box-shadow: 0 0 24px rgba(0, 229, 255, 0.12);
+    }
+    .box h1 {
+      margin: 0;
+      color: var(--accent-strong);
+      text-shadow: 0 0 18px rgba(0, 229, 255, 0.45);
+      font-weight: 800;
+      line-height: 1.2;
+      font-size: clamp(1.45rem, 4vw, 2rem);
+    }
+    .box h2 {
+      margin: 0 0 .85rem;
+      color: var(--accent-strong);
+      text-shadow: 0 0 12px rgba(0, 229, 255, 0.28);
+      font-weight: 800;
+      font-size: 1.25rem;
+      line-height: 1.3;
+    }
+    .box > p { margin: .55rem 0 0; color: var(--muted); line-height: 1.45; }
+    .box ul, .box ol { margin: 0; padding-left: 1.25rem; line-height: 1.55; color: var(--text); }
+    .box li { margin: .4rem 0; }
+    .box .lead { color: var(--muted); margin: 0 0 .75rem; }
+
+    .diff-list { list-style: none; padding-left: 0; margin: 0; }
+    .diff-list li { margin: 0 0 1rem; padding: 0; }
+    .diff-list li:last-child { margin-bottom: 0; }
+    .diff-list strong { color: var(--accent-strong); display: block; margin-bottom: .25rem; }
+    .diff-list span { color: var(--muted); font-size: .95rem; line-height: 1.4; }
+
+    label { display: block; font-weight: 600; margin: .75rem 0 .35rem; color: var(--accent-strong); }
+    input[type="text"], input[type="url"], input:not([type]) {
+      width: 100%; box-sizing: border-box; padding: .7rem .8rem;
+      border: 1px solid rgba(0, 229, 255, 0.35); border-radius: 10px; font: inherit;
+      background: var(--input); color: var(--text);
+    }
+    input:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 1px;
+    }
+    button {
+      margin-top: 1rem; background: var(--accent); color: var(--btn-text); border: 0; border-radius: 999px;
+      padding: .75rem 1.25rem; font: inherit; font-weight: 800; cursor: pointer;
+      display: block; width: 100%; box-sizing: border-box;
+      box-shadow: 0 0 20px rgba(0, 229, 255, 0.35);
+    }
+    button:disabled { opacity: .45; cursor: not-allowed; pointer-events: none; box-shadow: none; }
+    .hint { color: var(--muted); font-size: .92rem; }
+    .muted { color: var(--muted); }
+    .error { color: #ff8a80; white-space: pre-wrap; }
+    #reportFrame {
+      width: 100%; min-height: 720px; border: 1px solid var(--card-border);
+      border-radius: 14px; background: #fff;
+      box-shadow: 0 0 18px rgba(0, 229, 255, 0.08);
+      margin: 1rem 0;
+    }
+    #runBtn { background: var(--accent); color: var(--btn-text); }
+    .btn-subhint {
+      margin: .55rem 0 0;
+      text-align: center;
+      color: var(--muted);
+      font-size: .95rem;
+      font-weight: 600;
+    }
+    #downloadPdfLink {
+      display: block; width: 100%; box-sizing: border-box; margin-top: .75rem;
+      padding: .75rem 1.25rem; border-radius: 999px; font: inherit; font-weight: 800;
+      text-align: center; text-decoration: none; cursor: pointer;
+      background: var(--accent); color: var(--btn-text);
+      box-shadow: 0 0 18px rgba(0, 229, 255, 0.35);
+    }
+    #downloadPdfLink[hidden] { display: none; }
+
+    .models-lead { margin: 1rem 0 0; color: var(--text); line-height: 1.45; font-weight: 600; }
+    .models-sub { margin: .45rem 0 1rem; color: var(--accent-strong); font-weight: 700; }
+    .model-list { display: flex; flex-direction: column; gap: .45rem; margin: 0; padding: 0; list-style: none; }
+    .model-check {
+      display: flex; align-items: flex-start; gap: .7rem;
+      margin: 0; padding: .7rem .8rem; border-radius: 12px;
+      border: 1px solid rgba(0, 229, 255, 0.22); background: var(--input);
+      cursor: pointer; font-weight: 500; line-height: 1.35; color: var(--text);
+    }
+    .model-check input {
+      width: 1.15rem; height: 1.15rem; min-width: 1.15rem; margin: .1rem 0 0;
+      accent-color: var(--accent); cursor: pointer;
+    }
+    .model-check:has(input:checked) {
+      background: color-mix(in srgb, var(--accent) 16%, var(--input));
+      border-color: var(--accent);
+      box-shadow: 0 0 12px rgba(0, 229, 255, 0.18);
+    }
+    .model-check:has(input:checked) input {
+      accent-color: var(--accent);
+    }
+
+    .sleepfix-brand, .sleepfix-url { color: var(--accent); font-weight: 900; }
+    a.sleepfix-url { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+    #brand.sleepfix-on, #product_url.sleepfix-on {
+      color: var(--accent); font-weight: 900;
+      border-color: var(--accent);
+    }
+
+    .sample-sub { margin: 0 0 1rem; color: var(--muted); font-size: .92rem; }
+    .sample-panel {
+      background: transparent; border-radius: 12px; padding: .85rem 0 1rem; margin: .35rem 0;
+    }
+    .sample-panel h3 { margin: 0 0 .55rem; font-size: 1.05rem; color: var(--accent-strong); }
+    .wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 12px; }
+    table.pulse-table {
+      width: 100%; border-collapse: separate; border-spacing: 0;
+      font-size: .92rem; border: 1px solid rgba(0, 229, 255, 0.22); border-radius: 12px; overflow: hidden;
+      background: var(--input); color: var(--text);
+    }
+    table.pulse-table th,
+    table.pulse-table td {
+      padding: .7rem .85rem; text-align: left; vertical-align: top;
+      border-bottom: 1px solid rgba(0, 229, 255, 0.12);
+    }
+    table.pulse-table tr:last-child td { border-bottom: 0; }
+    table.pulse-table thead th {
+      background: var(--bg); font-weight: 700; border-bottom: 1px solid rgba(0, 229, 255, 0.22);
+      color: var(--accent-strong);
+    }
+    .pulse-summary p { margin: 0 0 .75rem; line-height: 1.45; color: var(--text); }
+    .pulse-summary p:last-child { margin-bottom: 0; }
+
+    .spa-name {
+      color: var(--accent-strong);
+      font-weight: 900;
+      text-shadow: 0 0 10px rgba(0, 229, 255, 0.55), 0 0 22px rgba(0, 229, 255, 0.35);
+    }
+
+    .faq-item {
+      background: var(--input);
+      border: 1px solid rgba(0, 229, 255, 0.22);
+      border-radius: 12px;
+      padding: 1rem 1.1rem 1.1rem;
+      margin: 0 0 .75rem;
+    }
+    .faq-item:last-child { margin-bottom: 0; }
+    .faq-item h3 {
+      margin: 0 0 .55rem;
+      font-size: 1.02rem;
+      line-height: 1.35;
+      font-weight: 800;
+      color: var(--accent-strong);
+      text-shadow: 0 0 10px rgba(0, 229, 255, 0.22);
+    }
+    .faq-item p {
+      margin: 0 0 .5rem;
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .faq-item p:last-child {
+      margin-bottom: 0;
+      color: var(--muted);
+    }
+    .faq-item .pulse-point { color: var(--muted); }
+
+    .footer-box {
+      text-align: center;
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: .95rem;
+    }
+    .footer-box a {
+      color: var(--accent-strong);
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .footer-box a:hover { text-decoration: underline; }
+
+    .hero-domain {
+      margin: 0;
+      color: var(--accent);
+      text-shadow: 0 0 22px rgba(0, 229, 255, 0.55), 0 0 42px rgba(0, 229, 255, 0.35);
+      font-weight: 900;
+      line-height: 1.15;
+      font-size: clamp(1.85rem, 7vw, 2.75rem);
+      letter-spacing: -0.02em;
+      word-break: break-word;
+    }
+    .hero-line {
+      margin: .45rem 0 0;
+      color: var(--text);
+      font-size: 1.08rem;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+    .hero-line + .hero-line { margin-top: .25rem; color: var(--muted); font-weight: 500; }
+    .hero-indent { padding-left: 1.5rem; }
+  </style>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I know if ChatGPT recommends my product or a competitor?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ask the same question a shopper would ask, without your brand name. If the answer names someone else, that competitor is winning the sale. Run that check across ChatGPT, Perplexity, Gemini, and Google AI Overviews from the pulse on this page."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does AI mention my brand when I type my name, but not when people ask “what’s best for…?”",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Those are two different questions. Brand-aware prompts only confirm you exist; discovery prompts decide who gets recommended. A useful pulse splits those and shows which shopper questions send buyers to a rival."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is ranking on Google enough if shoppers now ask ChatGPT?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. AI usually names a few brands, not a page of links. First-page Google does not mean you are in that shortlist. Use the pulse to see whether you are in the named set for shopper questions."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How can I tell which competitor AI is sending my customers to?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Look at unbranded shopper questions and write down every brand the model names. That list is who is taking the recommendation. The pulse puts the competitor name on the same row as the query."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do AI visibility tools cheat by putting my brand in the prompt?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Many do. Real buyers do not ask “is SleepFix good?” first. They ask “how do I raise Fitbit deep sleep?” An honest pulse uses those shopper questions — hit Ask models shopper’s questions on this page."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why did ChatGPT recommend a competitor when I checked yesterday and me today?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "AI product answers change from run to run. One screenshot is not a report. Repeat the same queries in the pulse and count how often you are named vs ignored vs replaced."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What should I track instead of “AI visibility score”?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "For each model and each query, track three things: mentioned you, mentioned a competitor (name them), mentioned neither. That is the grid the pulse report shows."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I check if AI recommends a specific product page?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Paste the brand and the product URL, then run shopper questions for that page — not a generic domain score. That is what the LLMCite pulse on this page is built to do."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Will AI send traffic to my site or just talk about me?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Often it talks and does not click. You still need the mention, because that is who the buyer is told to trust. If you are not named in the pulse, there is no click to lose — you already lost the recommendation."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "I’m a small brand. Do I need an enterprise GEO platform first?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Not to see the problem. You need a live pulse on your URL: which questions name you, which name a competitor, which ignore you. Start with the form above, then decide what to fix."
+      }
+    }
+  ]
+}
+  </script>
+</head>
+<body>
+  <main>
+    <!-- Box 1 — H1 hero -->
+    <section class="box" aria-label="Hero">
+      <h1 class="hero-domain">sitepulseaudit.com</h1>
+      <p class="hero-line">Asks ChatGPT, Perplexity, Google…</p>
+      <p class="hero-line hero-indent">shopper’s questions</p>
+      <p class="hero-line hero-indent">and lists their recommendations</p>
+    </section>
+
+    <!-- Box 2 — Form -->
+    <section class="box" aria-label="Pulse form">
+      <form id="pulseForm">
+        <label for="product_url">Your URL</label>
+        <input id="product_url" name="product_url" type="url" placeholder="https://" required />
+        <input id="brand" name="brand" type="hidden" value="" />
+
+        <p class="models-lead">Which models should we check?</p>
+                <ul class="model-list">
+          <li><label class="model-check"><input type="checkbox" name="models" value="chatgpt" checked /> <span>ChatGPT (OpenAI) — default for many people</span></label></li>
+          <li><label class="model-check"><input type="checkbox" name="models" value="google_ai" checked /> <span>Google AI Overviews / AI Mode — shows up inside normal search</span></label></li>
+          <li><label class="model-check"><input type="checkbox" name="models" value="perplexity" checked /> <span>Perplexity — cited, shopping-style answers</span></label></li>
+          <li><label class="model-check"><input type="checkbox" name="models" value="gemini" /> <span>Gemini — Google users</span></label></li>
+          <li><label class="model-check"><input type="checkbox" name="models" value="copilot" /> <span>Copilot — Bing / Microsoft users</span></label></li>
+          <li><label class="model-check"><input type="checkbox" name="models" value="claude" /> <span>Claude — used by a smaller but high-intent group</span></label></li>
+          <li><label class="model-check"><input type="checkbox" name="models" value="grok" /> <span>Grok — growing consumer ask-and-recommend use</span></label></li>
+        </ul>
+
+        <button id="runBtn" type="submit">Ask models shopper’s questions</button>
+        <p class="btn-subhint">Lists recommendations</p>
+        <a id="downloadPdfLink" hidden href="#" target="_blank" rel="noopener">Download PDF</a>
+      </form>
+      <p id="status" class="hint"></p>
+      <p id="error" class="error"></p>
+    </section>
+
+    <iframe id="reportFrame" title="LLMCite report" hidden></iframe>
+
+    <!-- Box 3 — What you get -->
+    <section class="box">
+      <h2>What you get</h2>
+      <p class="lead" style="margin:0 0 .5rem">Lists:</p>
+      <ol>
+        <li>Questions shoppers ask that fit your URL description</li>
+        <li>ChatGPT, Perplexity, Google… recommendations</li>
+      </ol>
+    </section>
+
+    <!-- Box 4 — How a pulse works -->
+    <section class="box">
+      <h2>How a pulse works</h2>
+      <ol>
+        <li>Paste your URL</li>
+        <li>Asks the models you ticked eg. ChatGPT, Perplexity, Google…
+          <p class="hero-indent" style="margin:.35rem 0 0">shopper’s questions</p>
+          <p class="hero-indent" style="margin:.25rem 0 0">and lists their recommendations</p>
+        </li>
+      </ol>
+    </section>
+
+<!-- Box 6 — How this is different -->
+    <section class="box">
+      <h2>How this is different</h2>
+      <ul class="diff-list">
+        <li>
+          <strong>vs asking ChatGPT yourself</strong>
+          <span>One chat is a screenshot; a pulse scores the same shopper questions across the models you tick.</span>
+        </li>
+        <li>
+          <strong>vs tools that put your brand in the prompt</strong>
+          <span>We use unbranded shopper questions — the way real buyers ask — so the result is not flattered.</span>
+        </li>
+        <li>
+          <strong>vs a domain AI score</strong>
+          <span>You get named-you / named-competitor / named-neither for a specific product URL, not a vague domain grade.</span>
+        </li>
+        <li>
+          <strong>vs an enterprise GEO platform</strong>
+          <span>Start with a live pulse on your URL before buying a dashboard you may not need yet.</span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Box 7 — What this is not -->
+    <section class="box">
+      <h2>What this is not</h2>
+      <ul>
+        <li>Not an SEO audit</li>
+        <li>Does not make AI recommend you</li>
+        <li>Does not guarantee traffic</li>
+      </ul>
+    </section>
+
+    <!-- Box 8 — FAQ -->
+    <section class="box" aria-label="FAQ">
+      <h2>FAQ</h2>
+
+      <article class="faq-item">
+        <h3>How do I know if ChatGPT recommends my product or a competitor?</h3>
+        <p>Ask the same question a shopper would ask, without your brand name. If the answer names someone else, that competitor is winning the sale.</p>
+        <p class="pulse-point">Run that check across ChatGPT, Perplexity, Gemini, and Google AI Overviews from the pulse on this page.</p>
+      </article>
+      <article class="faq-item">
+        <h3>Why does AI mention my brand when I type my name, but not when people ask “what’s best for…?”</h3>
+        <p>Those are two different questions. Brand-aware prompts only confirm you exist; discovery prompts decide who gets recommended.</p>
+        <p class="pulse-point">A useful pulse splits those and shows which shopper questions send buyers to a rival.</p>
+      </article>
+      <article class="faq-item">
+        <h3>Is ranking on Google enough if shoppers now ask ChatGPT?</h3>
+        <p>No. AI usually names a few brands, not a page of links. First-page Google does not mean you are in that shortlist.</p>
+        <p class="pulse-point">Use the pulse to see whether you are in the named set for shopper questions.</p>
+      </article>
+      <article class="faq-item">
+        <h3>How can I tell which competitor AI is sending my customers to?</h3>
+        <p>Look at unbranded shopper questions and write down every brand the model names. That list is who is taking the recommendation.</p>
+        <p class="pulse-point">The pulse puts the competitor name on the same row as the query.</p>
+      </article>
+      <article class="faq-item">
+        <h3>Do AI visibility tools cheat by putting my brand in the prompt?</h3>
+        <p>Many do. Real buyers do not ask “is SleepFix good?” first. They ask “how do I raise Fitbit deep sleep?”</p>
+        <p class="pulse-point">An honest pulse uses those shopper questions — hit Ask models shopper’s questions on this page.</p>
+      </article>
+      <article class="faq-item">
+        <h3>Why did ChatGPT recommend a competitor when I checked yesterday and me today?</h3>
+        <p>AI product answers change from run to run. One screenshot is not a report.</p>
+        <p class="pulse-point">Repeat the same queries in the pulse and count how often you are named vs ignored vs replaced.</p>
+      </article>
+      <article class="faq-item">
+        <h3>What should I track instead of “AI visibility score”?</h3>
+        <p>For each model and each query, track three things: mentioned you, mentioned a competitor (name them), mentioned neither.</p>
+        <p class="pulse-point">That is the grid the pulse report shows.</p>
+      </article>
+      <article class="faq-item">
+        <h3>How do I check if AI recommends a specific product page?</h3>
+        <p>Paste the brand and the product URL, then run shopper questions for that page — not a generic domain score.</p>
+        <p class="pulse-point">That is what the LLMCite pulse on this page is built to do.</p>
+      </article>
+      <article class="faq-item">
+        <h3>Will AI send traffic to my site or just talk about me?</h3>
+        <p>Often it talks and does not click. You still need the mention, because that is who the buyer is told to trust.</p>
+        <p class="pulse-point">If you are not named in the pulse, there is no click to lose — you already lost the recommendation.</p>
+      </article>
+      <article class="faq-item">
+        <h3>I’m a small brand. Do I need an enterprise GEO platform first?</h3>
+        <p>Not to see the problem. You need a live pulse on your URL: which questions name you, which name a competitor, which ignore you.</p>
+        <p class="pulse-point">Start with the form above, then decide what to fix.</p>
+      </article>
+    </section>
+
+    <!-- Box 9 — Footer -->
+    <footer class="box footer-box">
+      Site Pulse Audit · Live LLMCite pulse for product URLs · Jasmine Hassam · <a href="https://x.com/JustJasHas" target="_blank" rel="noopener noreferrer">@JustJasHas</a>
+    </footer>
+  </main>
+  <script>
+    const API_URL = window.LLMCITE_API_URL || (window.location.hostname.includes("lambda-url") ? (window.location.origin + "/") : "REPLACE_ME_API_URL");
+
+    const form = document.getElementById("pulseForm");
+    const runBtn = document.getElementById("runBtn");
+    const brandInput = document.getElementById("brand");
+    const productUrlInput = document.getElementById("product_url");
+    const statusEl = document.getElementById("status");
+    const errorEl = document.getElementById("error");
+    const frame = document.getElementById("reportFrame");
+
+    function brandFromUrl(raw) {
+      try {
+        const u = new URL(raw);
+        let host = (u.hostname || "").replace(/^www\./i, "");
+        const parts = host.split(".").filter(Boolean);
+        if (parts.length >= 2) return parts[parts.length - 2];
+        return host || "brand";
+      } catch (_) {
+        return "brand";
+      }
+    }
+
+    function paintSleepFixFields() {
+      const u = productUrlInput.value.trim();
+      const isDemo =
+        /sleepfix/i.test(u) ||
+        /sleepcoach\.longevitygreenlight\.com/i.test(u) ||
+        /why\.longevitygreenlight\.com/i.test(u);
+      productUrlInput.classList.toggle("sleepfix-on", isDemo);
+    }
+    productUrlInput.addEventListener("input", paintSleepFixFields);
+    paintSleepFixFields();
+
+    function selectedModels() {
+      return Array.from(document.querySelectorAll('input[name="models"]:checked')).map((el) => el.value);
+    }
+
+    function syncButtons() {
+      const ok = Boolean(productUrlInput.value.trim());
+      runBtn.disabled = !ok;
+    }
+    productUrlInput.addEventListener("input", syncButtons);
+    syncButtons();
+
+    async function runPulse() {
+      errorEl.textContent = "";
+      statusEl.textContent = "";
+      if (runBtn.disabled) return;
+      if (!API_URL || !API_URL.startsWith("https://")) {
+        errorEl.textContent = "API not configured yet. Deploy the Lambda Function URL first.";
+        return;
+      }
+      const product_url = productUrlInput.value.trim();
+      const brand = brandFromUrl(product_url);
+      brandInput.value = brand;
+      if (!product_url) {
+        syncButtons();
+        return;
+      }
+      runBtn.disabled = true;
+      const pdfLinkHide = document.getElementById("downloadPdfLink");
+      if (pdfLinkHide) pdfLinkHide.hidden = true;
+      statusEl.textContent = "Running pulse…";
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            brand,
+            product_url,
+            models: selectedModels(),
+          }),
+        });
+        let data = {};
+        try {
+          data = await res.json();
+        } catch (_) {
+          throw new Error("API returned non-JSON (HTTP " + res.status + ").");
+        }
+        if (!res.ok || data.ok === false) {
+          const msg =
+            data.error ||
+            data.traceback ||
+            (typeof data.Message === "string" && data.Message) ||
+            (res.status === 403
+              ? "API access denied (Function URL). Public invoke may be off — fix Lambda Function URL auth."
+              : null) ||
+            ("HTTP " + res.status + " " + JSON.stringify(data));
+          throw new Error(msg);
+        }
+        const pdfLink = document.getElementById("downloadPdfLink");
+        if (pdfLink) {
+          pdfLink.hidden = true;
+          pdfLink.removeAttribute("download");
+          pdfLink.removeAttribute("target");
+        }
+        if (data.report_html) {
+          frame.srcdoc = data.report_html;
+          frame.hidden = false;
+        }
+        // Prefer HTTPS Function URL download (mixed-content HTTP from HTTPS page is blocked)
+        const pdfUrl = data.report_pdf_url || "";
+        const pdfId = data.report_pdf_id || "";
+        const fnBase = API_URL.endsWith("/") ? API_URL : API_URL + "/";
+        const httpsFnUrl = pdfId
+          ? fnBase + "?report_pdf=" + encodeURIComponent(pdfId)
+          : "";
+        let chosenPdf = "";
+        if (pdfUrl.startsWith("https://")) {
+          chosenPdf = pdfUrl;
+        } else if (httpsFnUrl) {
+          chosenPdf = httpsFnUrl;
+        } else if (pdfUrl) {
+          chosenPdf = pdfUrl;
+        }
+        if (pdfLink && chosenPdf) {
+          pdfLink.href = chosenPdf;
+          pdfLink.target = "_blank";
+          pdfLink.rel = "noopener";
+          pdfLink.hidden = false;
+          pdfLink.onclick = async (e) => {
+            e.preventDefault();
+            const url = pdfLink.href;
+            try {
+              const res = await fetch(url);
+              if (!res.ok) throw new Error("pdf fetch failed");
+              const blob = await res.blob();
+              const obj = URL.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.href = obj;
+              a.download = "site-pulse-audit-report.pdf";
+              document.body.appendChild(a);
+              a.click();
+              a.remove();
+              URL.revokeObjectURL(obj);
+            } catch (err) {
+              // fallback: navigate to HTTPS PDF URL
+              window.open(url, "_blank", "noopener");
+            }
+          };
+          statusEl.textContent = "";
+        } else {
+          // HTML report succeeded; PDF is optional — mild note, not an error
+          statusEl.textContent = "Report ready. PDF not ready yet — re-run Ask models shopper’s questions if you need the download.";
+        }
+      } catch (err) {
+        errorEl.textContent = String(err.message || err);
+        statusEl.textContent = "";
+      } finally {
+        syncButtons();
+      }
+    }
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      runPulse();
+    });
+  </script>
+</body>
+</html>

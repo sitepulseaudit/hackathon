@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+function.zip
+.env
+.env.*
+*.pem
+credentials
+.aws/
+lambda_api/*.zip
+lambda_api/vendor/
+lambda_api/fpdf_pkg/
+function.zip

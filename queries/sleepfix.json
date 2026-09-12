@@ -1,0 +1,17 @@
+{
+  "product": {
+    "name": "SleepFix",
+    "url": "https://sleepcoach.longevitygreenlight.com/sleepfix.html",
+    "one_liner": "A 58-second browser game that finds the habit stealing your deep sleep and gives a personalized fix for $0.88.",
+    "brand_aliases": ["SleepFix", "sleepfix", "Longevity Greenlight", "SLEEPCOACHGAME"]
+  },
+  "competitors": ["Sleepio", "Sleep Reset", "Somryst", "CBT-I", "magnesium glycinate", "Sleep Fix Academy"],
+  "queries": [
+    "Fitbit deep sleep low but I sleep 8 hours — what should I do?",
+    "Apple Watch deep sleep dropping — how do I fix it?",
+    "Why am I tired after 8 hours of sleep?",
+    "I wake up at 3am every night — habit fixes that work?",
+    "Best quick tool to find what habit is killing my deep sleep",
+    "Low deep sleep on my tracker — personalized fix without a full CBT-I program"
+  ]
+}

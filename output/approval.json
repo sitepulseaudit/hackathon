@@ -1,0 +1,6 @@
+{
+  "decision": "approve",
+  "decided_at": "2026-09-04T12:18:49.524482+00:00",
+  "publish_allowed": true,
+  "note": "LLMCite never auto-publishes. Approval only unlocks the next human deploy step."
+}

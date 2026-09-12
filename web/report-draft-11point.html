@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex" />
+  <title>DRAFT · Site Pulse Audit — Why can't I sleep</title>
+  <style>
+    :root {
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      color: #FFFFFF;
+      --accent: #00E5FF;
+      --accent-strong: #7DF9FF;
+      --neon: #00E5FF;
+      --bg: #000B1E;
+      --card: #001633;
+      --input: #000822;
+      --card-border: rgba(0, 229, 255, 0.35);
+      --muted: #A8C5D6;
+      --text: #FFFFFF;
+      --btn-text: #000000;
+      --box-border: 4px solid #00E5FF;
+      --ok: #5CFFB0;
+      --warn: #FFB74D;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); }
+    main { max-width: 720px; margin: 0 auto; padding: 1.25rem 1rem 3.5rem; }
+    a { color: var(--accent-strong); word-break: break-word; }
+
+    .draft-banner {
+      position: sticky; top: 0; z-index: 50;
+      background: #00E5FF; color: #000000;
+      font-weight: 800; text-align: center;
+      padding: .5rem 1rem; letter-spacing: .02em;
+      font-size: .92rem;
+      box-shadow: 0 0 24px rgba(0, 229, 255, 0.45);
+    }
+
+    .box {
+      background: var(--card);
+      border: var(--box-border);
+      border-radius: 16px;
+      padding: 1.25rem 1.3rem;
+      margin: 1.15rem 0;
+      box-shadow: 0 0 24px rgba(0, 229, 255, 0.12);
+      break-inside: avoid;
+    }
+    .box h1 {
+      margin: 0;
+      color: var(--accent-strong);
+      text-shadow: 0 0 18px rgba(0, 229, 255, 0.45);
+      font-weight: 800;
+      line-height: 1.2;
+      font-size: clamp(1.3rem, 3.5vw, 1.75rem);
+    }
+    .box h2 {
+      margin: 0 0 .7rem;
+      color: var(--accent-strong);
+      text-shadow: 0 0 12px rgba(0, 229, 255, 0.28);
+      font-weight: 800;
+      font-size: 1.15rem;
+      line-height: 1.3;
+    }
+    .box h3 {
+      margin: 1.1rem 0 .55rem;
+      color: var(--accent-strong);
+      font-weight: 800;
+      font-size: 1.02rem;
+    }
+    .box h3:first-child { margin-top: 0; }
+    .lead { color: var(--muted); margin: .55rem 0 .75rem; line-height: 1.45; }
+    .muted { color: var(--muted); }
+    .strong-text { color: var(--text); font-weight: 700; }
+    .brand { color: var(--accent); font-weight: 900; }
+
+    .list-num {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      color: var(--btn-text);
+      background: var(--accent);
+      border-radius: 999px;
+      padding: .18rem .6rem;
+      margin-bottom: .5rem;
+    }
+
+    .meta-stack { display: flex; flex-direction: column; gap: .65rem; margin-top: .75rem; }
+    .meta-item {
+      background: var(--input);
+      border: 1px solid rgba(0, 229, 255, 0.22);
+      border-radius: 12px;
+      padding: .7rem .85rem;
+    }
+    .meta-item .k { display: block; color: var(--muted); font-size: .82rem; margin-bottom: .2rem; }
+    .meta-item .v { color: var(--text); font-weight: 700; word-break: break-word; }
+
+    .llm-pills { display: flex; flex-wrap: wrap; gap: .4rem; }
+    .pill {
+      display: inline-block;
+      padding: .3rem .65rem;
+      border-radius: 999px;
+      font-size: .88rem;
+      font-weight: 700;
+      border: 1px solid rgba(0, 229, 255, 0.35);
+      background: color-mix(in srgb, var(--accent) 16%, var(--input));
+      color: var(--text);
+    }
+
+    .q-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+      counter-reset: q;
+    }
+    .q-list > li {
+      counter-increment: q;
+      display: grid;
+      grid-template-columns: 1.7rem 1fr;
+      column-gap: .7rem;
+      row-gap: .35rem;
+      align-items: start;
+      margin: 0 0 1rem;
+      padding: .85rem .9rem;
+      background: var(--input);
+      border: 1px solid rgba(0, 229, 255, 0.22);
+      border-radius: 12px;
+      line-height: 1.4;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .q-list > li::before {
+      content: counter(q);
+      grid-column: 1;
+      grid-row: 1;
+      font-weight: 900;
+      color: var(--btn-text);
+      background: var(--accent);
+      border-radius: 8px;
+      width: 1.7rem;
+      height: 1.7rem;
+      display: grid;
+      place-items: center;
+      font-size: .85rem;
+    }
+    .q-body {
+      grid-column: 2;
+      grid-row: 1 / span 20;
+      min-width: 0;
+      width: 100%;
+      display: block;
+    }
+    .model-rec {
+      display: block;
+      width: 100%;
+      margin: .85rem 0 0;
+    }
+    .model-rec .rec-label {
+      display: block;
+      margin: 0 0 .45rem;
+      font-weight: 800;
+      color: var(--accent-strong);
+    }
+    .url-row {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      margin: 0 0 .45rem;
+      padding: .7rem .85rem;
+      background: var(--bg);
+      border: 1px solid rgba(0, 229, 255, 0.35);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: .9rem;
+      line-height: 1.4;
+      white-space: nowrap;
+      overflow-x: auto;
+      overflow-y: hidden;
+      word-break: normal;
+      overflow-wrap: normal;
+      user-select: all;
+      -webkit-user-select: all;
+    }
+
+    .model-block { margin-top: 1.15rem; }
+    .model-block:first-of-type { margin-top: .25rem; }
+    .rec-stack {
+      display: flex;
+      flex-direction: column;
+      gap: .55rem;
+    }
+    .rec-card {
+      background: var(--input);
+      border: 1px solid rgba(0, 229, 255, 0.22);
+      border-radius: 12px;
+      padding: .8rem .9rem;
+    }
+    .rec-card .ask {
+      display: block;
+      font-size: .75rem;
+      font-weight: 800;
+      letter-spacing: .03em;
+      text-transform: uppercase;
+      color: var(--accent-strong);
+      margin-bottom: .3rem;
+    }
+    .rec-card .named {
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .rec-card .named.you { color: var(--ok); }
+    .rec-card .named.rival { color: var(--warn); }
+    .rec-card .named.none { color: var(--muted); font-weight: 600; font-size: .98rem; }
+    .rec-card .url {
+      display: block;
+      font-size: .88rem;
+      color: var(--muted);
+      margin-top: .2rem;
+      word-break: break-all;
+    }
+
+    .footer-box {
+      text-align: center;
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: .95rem;
+    }
+
+    @media print {
+      body { background: #fff; color: #000; }
+      .draft-banner {
+        position: static;
+        background: #ddd; color: #000;
+        box-shadow: none;
+        border: 2px solid #000;
+      }
+      .box {
+        background: #fff;
+        border: 3px solid #000;
+        box-shadow: none;
+        page-break-inside: avoid;
+      }
+      .box h1, .box h2, .box h3, a, .brand, .rec-card .ask {
+        color: #000 !important;
+        text-shadow: none !important;
+      }
+      .list-num, .pill, .q-list li::before {
+        background: #eee !important;
+        color: #000 !important;
+        border: 1px solid #000;
+      }
+      .meta-item, .q-list li, .rec-card {
+        background: #f7f7f7 !important;
+        border-color: #999 !important;
+        color: #000 !important;
+      }
+      .rec-card .named.you, .rec-card .named.rival, .rec-card .named.none { color: #000 !important; }
+      .muted, .lead { color: #333 !important; }
+      a { text-decoration: underline; }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="draft-banner" role="status">DRAFT LAYOUT — not live yet</div>
+
+  <main>
+    <section class="box" aria-label="Report header">
+      <h1>Site Pulse Audit</h1>
+      <p class="lead" style="margin-top:.75rem"><span class="strong-text">Your URL:</span></p>
+      <p class="v" style="margin:.35rem 0 0;font-weight:700;word-break:break-word">
+        <a href="https://why.longevitygreenlight.com/">https://why.longevitygreenlight.com/</a>
+      </p>
+    </section>
+
+    <section class="box" aria-label="1 Shopper questions">
+      <h2>Questions shoppers ask that fit your URL description.</h2>
+      <ol class="q-list">
+        <li>
+          <div class="q-body">
+            <div class="strong-text">Q1</div>
+            <div class="model-rec">
+              <p class="rec-label">ChatGPT recommends:</p>
+              <div class="url-row" tabindex="0">https://www.calm.com/</div>
+              <div class="url-row" tabindex="0">https://www.headspace.com/</div>
+              <div class="url-row" tabindex="0">https://www.sleepcycle.com/</div>
+            </div>
+            <div class="model-rec">
+              <p class="rec-label">Perplexity recommends:</p>
+              <div class="url-row" tabindex="0">https://www.calm.com/</div>
+              <div class="url-row" tabindex="0">https://www.sleepfoundation.org/</div>
+            </div>
+            <div class="model-rec">
+              <p class="rec-label">Google AI recommends:</p>
+              <div class="url-row" tabindex="0">https://www.calm.com/</div>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="q-body">
+            <div class="strong-text">Q2</div>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <footer class="box footer-box">
+      Site Pulse Audit · draft template
+    </footer>
+  </main>
+</body>
+</html>

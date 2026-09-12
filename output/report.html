@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex" />
+  <title>Site Pulse Audit</title>
+  <style>
+    :root {
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      color: #FFFFFF;
+      --accent: #00E5FF;
+      --accent-strong: #7DF9FF;
+      --neon: #00E5FF;
+      --bg: #000B1E;
+      --card: #001633;
+      --input: #000822;
+      --card-border: rgba(0, 229, 255, 0.35);
+      --muted: #A8C5D6;
+      --text: #FFFFFF;
+      --btn-text: #000000;
+      --box-border: 4px solid #00E5FF;
+      --ok: #5CFFB0;
+      --warn: #FFB74D;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); }
+    main { max-width: 720px; margin: 0 auto; padding: 1.25rem 1rem 3.5rem; }
+    a { color: var(--accent-strong); word-break: break-word; }
+
+    .box {
+      background: var(--card);
+      border: var(--box-border);
+      border-radius: 16px;
+      padding: 1.25rem 1.3rem;
+      margin: 1.15rem 0;
+      box-shadow: 0 0 24px rgba(0, 229, 255, 0.12);
+      break-inside: avoid;
+    }
+    .box h1 {
+      margin: 0;
+      color: var(--accent-strong);
+      text-shadow: 0 0 18px rgba(0, 229, 255, 0.45);
+      font-weight: 800;
+      line-height: 1.2;
+      font-size: clamp(1.3rem, 3.5vw, 1.75rem);
+    }
+    .box h2 {
+      margin: 0 0 .7rem;
+      color: var(--accent-strong);
+      text-shadow: 0 0 12px rgba(0, 229, 255, 0.28);
+      font-weight: 800;
+      font-size: 1.15rem;
+      line-height: 1.3;
+    }
+    .lead { color: var(--muted); margin: .55rem 0 .75rem; line-height: 1.45; }
+    .muted { color: var(--muted); }
+    .strong-text { color: var(--text); font-weight: 700; }
+    .v { color: var(--text); font-weight: 700; word-break: break-word; }
+
+    .q-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+      counter-reset: q;
+    }
+    .q-list > li {
+      counter-increment: q;
+      display: grid;
+      grid-template-columns: 1.7rem 1fr;
+      column-gap: .7rem;
+      row-gap: .35rem;
+      align-items: start;
+      margin: 0 0 1rem;
+      padding: .85rem .9rem;
+      background: var(--input);
+      border: 1px solid rgba(0, 229, 255, 0.22);
+      border-radius: 12px;
+      line-height: 1.4;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .q-list > li::before {
+      content: counter(q);
+      grid-column: 1;
+      grid-row: 1;
+      font-weight: 900;
+      color: var(--btn-text);
+      background: var(--accent);
+      border-radius: 8px;
+      width: 1.7rem;
+      height: 1.7rem;
+      display: grid;
+      place-items: center;
+      font-size: .85rem;
+    }
+    .q-body {
+      grid-column: 2;
+      grid-row: 1 / span 20;
+      min-width: 0;
+      width: 100%;
+      display: block;
+    }
+    .model-rec {
+      display: block;
+      width: 100%;
+      margin: .85rem 0 0;
+    }
+    .model-rec .rec-label {
+      display: block;
+      margin: 0 0 .45rem;
+      font-weight: 800;
+      color: var(--accent-strong);
+    }
+    .url-row {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      margin: 0 0 .45rem;
+      padding: .7rem .85rem;
+      background: var(--bg);
+      border: 1px solid rgba(0, 229, 255, 0.35);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: .9rem;
+      line-height: 1.4;
+      white-space: nowrap;
+      overflow-x: auto;
+      overflow-y: hidden;
+      word-break: normal;
+      overflow-wrap: normal;
+      user-select: all;
+      -webkit-user-select: all;
+    }
+
+    .footer-box {
+      text-align: center;
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: .95rem;
+    }
+    .what-next-box pre.what-next {
+      margin: 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      color: var(--text);
+      line-height: 1.55;
+      font-size: .95rem;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="box" aria-label="Report header">
+      <h1>Site Pulse Audit</h1>
+      <p class="lead" style="margin-top:.75rem"><span class="strong-text">Your URL:</span></p>
+      <p class="v" style="margin:.35rem 0 0;font-weight:700;word-break:break-word">
+        <a href="https://example.com/ecojoy" rel="noopener">https://example.com/ecojoy</a>
+      </p>
+    </section>
+
+    <section class="box" aria-label="Shopper questions">
+      <h2>Questions shoppers ask that fit your URL description.</h2>
+      <ol class="q-list">
+<li><div class="q-body"><div class="strong-text">Best reusable water bottle</div><div class="model-rec"><p class="rec-label">ChatGPT recommends:</p><div class="url-row" tabindex="0">https://www.hydroflask.com</div></div><div class="model-rec"><p class="rec-label">Perplexity recommends:</p><div class="url-row" tabindex="0">https://www.hydroflask.com</div></div></div></li>
+<li><div class="q-body"><div class="strong-text">Cheap bottle that lasts</div></div></li>
+      </ol>
+    </section>
+
+    <section class="box what-next-box" aria-label="What to do next">
+      <h2>What to do next</h2>
+      <pre class="what-next">You: 0/10
+Highest: 2/10 https://www.hydroflask.com
+
+1. Edit your product page so the exact shopper questions from this pulse appear in plain text.
+2. Submit the updated page for indexing so it can be found publicly.
+3. Get one outside mention (review, directory, or partner page) that links to your URL.
+4. Re-run the pulse after those are live.</pre>
+    </section>
+
+    <footer class="box footer-box">
+      Site Pulse Audit · 2026-09-12T12:00:00+00:00
+    </footer>
+  </main>
+</body>
+</html>

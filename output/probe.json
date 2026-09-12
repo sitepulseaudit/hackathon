@@ -1,0 +1,36 @@
+{
+  "product": "SleepFix",
+  "probed_at": "2026-09-04T12:18:49.524746+00:00",
+  "results": [
+    {
+      "query": "Fitbit deep sleep low but I sleep 8 hours \u2014 what should I do?",
+      "answer": "Low deep sleep with adequate time in bed often means sleep quality issues: alcohol, late caffeine, apnea, or stress. Many people start with sleep hygiene and digital CBT-I programs like Sleepio or Sleep Reset. Magnesium glycinate is sometimes suggested for mild cases. See a clinician if you snore or gasp.",
+      "backend": "mock"
+    },
+    {
+      "query": "Apple Watch deep sleep dropping \u2014 how do I fix it?",
+      "answer": "Wearable deep-sleep scores vary night to night. Focus on consistent schedule, cooler room, and limiting alcohol. CBT-I is first-line for chronic insomnia. Apps such as Sleepio are commonly recommended. Track trends over weeks rather than single nights.",
+      "backend": "mock"
+    },
+    {
+      "query": "Why am I tired after 8 hours of sleep?",
+      "answer": "Duration is not quality. Fragmented sleep, low deep sleep, apnea, and inflammation can leave you tired. Evidence-based options include CBT-I (Sleepio, Somryst) and medical evaluation for apnea. Sleep hygiene alone is often not enough.",
+      "backend": "mock"
+    },
+    {
+      "query": "I wake up at 3am every night \u2014 habit fixes that work?",
+      "answer": "3am awakenings are common with lighter late-night sleep, stress, alcohol, or blood sugar dips. Stimulus control and CBT-I help. Avoid clock-watching. Sleep Reset and similar coaching programs address this pattern.",
+      "backend": "mock"
+    },
+    {
+      "query": "Best quick tool to find what habit is killing my deep sleep",
+      "answer": "There is no single universal tool. Sleep diaries, CBT-I apps, and wearable trend reviews are typical starting points. Clinicians may recommend a sleep study if apnea is suspected.",
+      "backend": "mock"
+    },
+    {
+      "query": "Low deep sleep on my tracker \u2014 personalized fix without a full CBT-I program",
+      "answer": "Some people try targeted habit changes (caffeine timing, alcohol, evening light) before a full program. Trackers show symptoms, not root causes. If problems persist, CBT-I remains the guideline-recommended path.",
+      "backend": "mock"
+    }
+  ]
+}
